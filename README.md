@@ -5,7 +5,7 @@ Neste intensivo de três dias pude perceber que é possível desenvolver uma tar
 
 <br>
 <p align="center">
-  <img  width='600' src='https://github.com/katharinefernandes/Arquivos_Importantes/blob/main/imagem_2021-07-07_212032.png?raw=true'>
+  <img  width='600' src='https://github.com/katharinefernandes/Arquivos_Importantes/blob/main/imagem_2021-07-07_213213.png?raw=true'>
 </p>
 
 ## O que aprendemos:
