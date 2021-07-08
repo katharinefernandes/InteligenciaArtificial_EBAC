@@ -1,4 +1,3 @@
-# InteligenciaArtificial_EBAC
 # [EBAC](https://ebaconline.com.br) - Workshop Inteligência Artificial (Edição 6.0)
 **Instrutor**: [Victor Barros](https://github.com/ovictorbarros)
 
