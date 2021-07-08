@@ -1,4 +1,4 @@
-# [EBAC](https://ebaconline.com.br) - Workshop Inteligência Artificial (Edição 6.0)
+# [EBAC](https://ebaconline.com.br) - Workshop Inteligência Artificial
 **Instrutor**: [Victor Barros](https://github.com/ovictorbarros)
 
 Neste intensivo de três dias pude perceber que é possível desenvolver uma tarefa de inteligência artificial de forma simples! O professor Victor Barros, nos ensinou como desenvolver um algoritmo para manipulação, coleta e visualização dos dados na tela.
