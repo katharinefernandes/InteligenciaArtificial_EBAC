@@ -23,8 +23,13 @@ Original file is located at
 import pandas as pd
 
 #Visualização
+import missingno
+import matplotlib.pylab as plt
+import seaborn as sns
 
 #Machine Learning
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
 
 """#### Carregando os dados
 
@@ -75,73 +80,182 @@ df.info()
 11.  Approved conversion - Número total de pessoas que compraram o produto depois de ver o anúncio.
 """
 
-
+df.head()
 
 """#### Renomeando as Colunas"""
 
+df.rename(columns= {'ad_id': 'id_anuncio', 'xyz_campaign_id': 'id_campanha', 'fb_campaign_id': 'id_fb_campanha',
+                     'age': 'idade', 'gender': 'genero', 'interest': 'interesse', 'Impressions': 'numero_exibicoes',
+                     'Clicks': 'cliques_no_anuncio', 'Spent': 'valor_pago_anuncio', 'Total_Conversion': 'conversao',
+                     'Approved_Conversion': 'compras'}, inplace = True)
 
+df.head()
 
-"""Informações Estatísticas
+df.columns
 
-#### Dados Faltantes
-"""
+"""#### Informações Estatísticas"""
 
+df.describe()
 
+df.describe(include='all')
+
+"""#### Dados Faltantes"""
+
+df.isnull().sum()
+
+missingno.matrix(df, figsize=(30,10))
 
 """#### Outliers"""
 
-
+plt.figure(figsize=(30,10))
+df.boxplot()
+plt.show()
 
 """#### Duplicatas"""
 
-
+df[df.duplicated()]
 
 """#### Matriz de Correlação"""
 
-
+plt.figure(figsize=(12,10))
+corr_matrix = df.corr()
+sns.heatmap(corr_matrix, annot=True, cmap=plt.cm.Reds)
+plt.show()
 
 """"numero_exibicoes" e "conversao" estão mais correlacionados com "compras" do que "cliques_no_anuncio" e "valor_pago_anuncio".
 
 #### Avaliando as Features (Colunas)
+
+##### id_campanha - ID associado a cada campanha publicitária da empresa XYZ
 """
 
+df["id_campanha"].nunique()
 
+df["id_campanha"].unique()
 
+df["id_campanha"].replace({916:"campanha_1", 936: "campanha_2", 1178: "campanha_3"}, inplace=True)
 
+df.head()
 
+df.tail()
 
+plt.figure(figsize=(12,10))
+sns.countplot(x="id_campanha", data=df)
+plt.show()
 
+"""campanha_3 tem o maior número de anúncios"""
 
+plt.figure(figsize=(12,10))
+plt.bar(df["id_campanha"], df["compras"])
+plt.ylabel("Compras")
+plt.xlabel("Campanhas/Compras")
+plt.show()
 
+"""##### idade - idade da pessoa a quem o anúncio é mostrado."""
 
+df["idade"].nunique()
 
+df["idade"].unique()
 
+plt.figure(figsize=(12,10))
+sns.countplot(x = "idade", data=df)
+plt.show()
 
+plt.figure(figsize=(12,10))
+tips = sns.load_dataset("tips")
+sns.barplot(x=df["id_campanha"], y=df["compras"], hue=df["idade"], data=tips)
+plt.show()
 
+"""Na campanha_3 e campanha_2 o grupo de 30-34 anos mostra mais interesse
 
+Na campanha_1 o grupo de 40-44 anos mostra mais interesse
 
+##### gênero - sexo da pessoa que deseja que o anúncio seja mostrado
+"""
 
-"""#### interesse - código que especifica a categoria à qual pertence o interesse da pessoa (os interesses são mencionados no perfil público da pessoa no Facebook)"""
+plt.figure(figsize=(12,10))
+sns.countplot(x= "genero", data=df)
+plt.show()
 
-
-
-"""#### valor_pago_anuncio - Valor pago pela empresa xyz ao Facebook, para exibir aquele anúncio."""
-
-
-
-"""#### numero_exibicoes - o número de vezes que o anúncio foi mostrado."""
-
-
-
-"""#### Pessoas que compraram (por idade/gênero)"""
-
-
+plt.figure(figsize=(12,10))
+tips = sns.load_dataset("tips")
+sns.barplot(x=df["id_campanha"], y=df["compras"], hue=df["genero"], data=tips)
+plt.show()
 
 """# Etapa 4: Modelagem/Machine Learning"""
 
+df.shape
 
+amostra_df = df.sample(n=20)
 
-"""# Etapa 5: Avaliando o Modelo
+amostra_df.shape
 
-"""
+amostra_df.head()
 
+sns.pairplot(amostra_df, x_vars=["cliques_no_anuncio"], y_vars=["valor_pago_anuncio"], height=4, kind="scatter")
+plt.show()
+
+sns.pairplot(df, x_vars=["cliques_no_anuncio"], y_vars=["valor_pago_anuncio"], height=4, kind="scatter")
+plt.show()
+
+df.head()
+
+df = df.replace('30-34',0.0011)
+df = df.replace('35-39',0.0012)
+df = df.replace('40-44',0.0013)
+df = df.replace('45-49',0.0014)
+
+df.tail()
+
+df = df.replace('M', 1)
+df = df.replace('F', 0)
+
+df.head()
+
+X = df[['idade', 'genero', 'interesse', 'numero_exibicoes', 'cliques_no_anuncio']]
+
+Y = df['valor_pago_anuncio']
+
+X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size = 0.3)
+
+X_train.shape
+
+X_test.shape
+
+X_train.head()
+
+Y_train.head()
+
+model = LinearRegression()
+
+model
+
+model.fit(X_train, Y_train)
+
+model.coef_
+
+model.intercept_
+
+#y = ax + b
+
+model.score(X_test, Y_test) * 100
+
+"""### Predição para Campanhas no Facebook"""
+
+df.head()
+
+df.tail()
+
+idade = float(input("Idade: "))
+genero = int(input("Gênero: "))
+interesse = int(input("Interesse: "))
+numero_exibicoes = int(input("Exibições: "))
+cliques_no_anuncio = int(input("Cliques: "))
+
+idade
+
+genero
+
+pred = model.predict([[idade, genero, interesse, numero_exibicoes, cliques_no_anuncio]])
+
+print(pred)
